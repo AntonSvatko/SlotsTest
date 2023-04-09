@@ -9,5 +9,26 @@
         android:id="@+id/splashFragment"
         android:name="com.test.slots.ui.fragments.splash.SplashFragment"
         android:label="SplashFragment"
-        tools:layout="@layout/fragment_splash"/>
+        tools:layout="@layout/fragment_splash">
+        <action
+            android:id="@+id/action_splashFragment_to_menuFragment"
+            app:destination="@id/menuFragment"
+            app:popUpToInclusive="true"
+            app:popUpTo="@id/splashFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/menuFragment"
+        android:name="com.test.slots.ui.fragments.menu.MenuFragment"
+        android:label="MenuFragment"
+        tools:layout="@layout/fragment_menu">
+        <action
+            android:id="@+id/action_menuFragment_to_slotFragment"
+            app:destination="@id/slotFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/slotFragment"
+        android:name="com.test.slots.ui.fragments.slots.SlotFragment"
+        android:label="SlotFragment"
+        tools:layout="@layout/fragment_slots"/>
 </navigation>

@@ -25,12 +25,11 @@ class SplashFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.startProgress(1000)
+        viewModel.startProgress(3000)
         viewModel.progressLiveData.observe(viewLifecycleOwner) {
+            binding.progressBar.progress = it
             if (it == MAX_PROGRESS)
-               findNavController().navigate()
-            else
-                binding.progressBar.progress = it
+                findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToMenuFragment())
         }
 
     }

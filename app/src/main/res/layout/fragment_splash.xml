@@ -7,20 +7,16 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/bg"/>
+        android:layout_height="match_parent"
+        android:background="@drawable/bg">
 
         <ProgressBar
             android:id="@+id/progress_bar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical"
+            android:layout_marginHorizontal="16dp" />
 
     </FrameLayout>
 </layout>
