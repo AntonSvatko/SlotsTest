@@ -16,6 +16,19 @@ class SpeedyLinearLayoutManager(
     private val callBack: (() -> Unit)? = null
 ) :
     LinearLayoutManager(context, orientation, reverseLayout) {
+
+    override fun onAttachedToWindow(view: RecyclerView?) {
+        super.onAttachedToWindow(view)
+        val scrollListener = object : OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if(newState == SCROLL_STATE_IDLE)
+                    callBack?.invoke()
+            }
+        }
+        view?.addOnScrollListener(scrollListener)
+    }
+
     override fun smoothScrollToPosition(
         recyclerView: RecyclerView,
         state: RecyclerView.State,
@@ -28,13 +41,7 @@ class SpeedyLinearLayoutManager(
                 }
             }
 
-        recyclerView.addOnScrollListener(object : OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                if(newState == SCROLL_STATE_IDLE)
-                    callBack?.invoke()
-            }
-        })
+
         linearSmoothScroller.targetPosition = position
         startSmoothScroll(linearSmoothScroller)
     }

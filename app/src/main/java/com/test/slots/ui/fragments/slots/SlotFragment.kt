@@ -2,9 +2,11 @@ package com.test.slots.ui.fragments.slots
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -74,14 +76,17 @@ class SlotFragment : Fragment() {
     }
 
     private fun spin() {
-        viewModel.finishItemCoef1 =
-            binding.rvSlot1.scrollRecyclerViewSlot(adapter1, 3).coefficient
-        viewModel.finishItemCoef2 =
-            binding.rvSlot2.scrollRecyclerViewSlot(adapter2, 4).coefficient
-        viewModel.finishItemCoef3 =
-            binding.rvSlot3.scrollRecyclerViewSlot(adapter3, 5).coefficient
-        binding.isScrolling = true
-        viewModel.spin()
+        if(viewModel.spin()) {
+            viewModel.finishItemCoef1 =
+                binding.rvSlot1.scrollRecyclerViewSlot(adapter1, 3).coefficient
+            viewModel.finishItemCoef2 =
+                binding.rvSlot2.scrollRecyclerViewSlot(adapter2, 4).coefficient
+            viewModel.finishItemCoef3 =
+                binding.rvSlot3.scrollRecyclerViewSlot(adapter3, 5).coefficient
+            binding.isScrolling = true
+        } else {
+            Toast.makeText(requireContext(), "No money:(", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun RecyclerView.setupRecyclerView(

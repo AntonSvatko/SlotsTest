@@ -32,9 +32,13 @@ class SlotsViewModel : ViewModel() {
         _currentBet.value = listOfBets.last()
     }
 
-    fun spin() {
-        _credit.value = _credit.value?.minus(_currentBet.value ?: 0)
-    }
+    fun spin(): Boolean =
+        if ((_credit.value ?: 0) >= (_currentBet.value ?: 0)) {
+            _credit.value = _credit.value?.minus(_currentBet.value ?: 0)
+            true
+        } else
+            false
+
 
     fun setRandom(increment: Int): MutableList<ITEMS> =
         ITEMS.values().toMutableList().apply {
@@ -52,7 +56,7 @@ class SlotsViewModel : ViewModel() {
             finishItemCoef1 * (_currentBet.value ?: 0)
         else 0
 
-        _credit.value = credit.value?.plus(result)
+        _credit.value = _credit.value?.plus(result)
         return result
     }
 }

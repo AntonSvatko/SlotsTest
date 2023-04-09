@@ -38,4 +38,23 @@ class SlotUnitTest {
             0
         )
     }
+
+    @Test
+    fun testSpin() {
+        assertEquals(
+            viewModel.spin(),
+            true
+        )
+    }
+
+    @Test
+    fun testSpinNoMoney() {
+        repeat(50) {
+            viewModel.spin()
+        }
+        assertEquals(
+            viewModel.spin(),
+            false
+        )
+    }
 }
