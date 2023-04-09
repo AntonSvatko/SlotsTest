@@ -1,4 +1,6 @@
 package com.test.slots.ui.fragments.menu
 
-class MenuFragment {
+import androidx.fragment.app.Fragment
+
+class MenuFragment: Fragment() {
 }
