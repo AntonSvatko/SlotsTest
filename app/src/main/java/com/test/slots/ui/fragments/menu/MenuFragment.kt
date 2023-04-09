@@ -1,5 +1,6 @@
 package com.test.slots.ui.fragments.menu
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,7 @@ class MenuFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentMenuBinding.inflate(inflater)
+        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         return binding.root
     }
 
