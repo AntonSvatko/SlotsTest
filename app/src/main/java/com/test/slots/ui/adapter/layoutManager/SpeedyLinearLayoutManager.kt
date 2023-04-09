@@ -3,10 +3,11 @@ package com.test.slots.ui.adapter.layoutManager
 import android.content.Context
 import android.util.DisplayMetrics
 import android.util.Log
-import android.widget.AbsListView.OnScrollListener.SCROLL_STATE_IDLE
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener
+import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
 
 class SpeedyLinearLayoutManager(
     context: Context?,
@@ -25,12 +26,15 @@ class SpeedyLinearLayoutManager(
                 override fun calculateSpeedPerPixel(displayMetricsTrell: DisplayMetrics): Float {
                     return MILLISECONDS_PER_INCH / displayMetricsTrell.densityDpi
                 }
-
-                override fun onStop() {
-                    super.onStop()
-                    callBack?.invoke()
-                }
             }
+
+        recyclerView.addOnScrollListener(object : OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if(newState == SCROLL_STATE_IDLE)
+                    callBack?.invoke()
+            }
+        })
         linearSmoothScroller.targetPosition = position
         startSmoothScroll(linearSmoothScroller)
     }

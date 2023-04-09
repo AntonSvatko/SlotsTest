@@ -52,4 +52,8 @@ dependencies {
 
     //viewModel delegate
     implementation 'androidx.fragment:fragment-ktx:1.5.6'
+
+    //tests
+    testImplementation "androidx.arch.core:core-testing:2.2.0"
+
 }

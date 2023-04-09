@@ -2,11 +2,11 @@ package com.test.slots.ui.fragments.slots
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.test.slots.data.ITEMS
@@ -17,8 +17,7 @@ import com.test.slots.ui.adapter.layoutManager.SpeedyLinearLayoutManager
 @SuppressLint("SetTextI18n")
 class SlotFragment : Fragment() {
     private lateinit var binding: FragmentSlotsBinding
-    private val listOfBets = listOf(10, 20, 30)
-    private var currentBet = listOfBets.first()
+    private val viewModel: SlotsViewModel by viewModels()
 
     private val adapter1 by lazy {
         ScrollingSlotAdapter().apply { submitList(ITEMS.values()) }
@@ -45,8 +44,17 @@ class SlotFragment : Fragment() {
         binding.rvSlot2.setupRecyclerView(adapter2)
         binding.rvSlot3.setupRecyclerView(adapter3) {
             binding.isScrolling = false
+            val result = viewModel.getResult()
+            binding.scoreWin.text = "$$result"
         }
-        binding.scoreBet.text = "$$currentBet"
+
+        viewModel.credit.observe(viewLifecycleOwner) {
+            binding.scoreCredit.text = "$$it"
+        }
+
+        viewModel.currentBet.observe(viewLifecycleOwner) {
+            binding.scoreBet.text = "$$it"
+        }
 
         clicks()
     }
@@ -54,32 +62,26 @@ class SlotFragment : Fragment() {
 
     private fun clicks() {
         binding.btnSpin.setOnClickListener {
-            binding.rvSlot1.scrollRecyclerViewSlot(adapter1, 3)
-            binding.rvSlot2.scrollRecyclerViewSlot(adapter2, 4)
-            binding.rvSlot3.scrollRecyclerViewSlot(adapter3, 5)
-            binding.isScrolling = true
+            spin()
         }
 
         binding.btnBetOne.setOnClickListener {
-            binding.scoreBet.text = "$${nextBet()}"
+            viewModel.nextBet()
         }
         binding.btnBetMax.setOnClickListener {
-            binding.scoreBet.text = "$${maxBet()}"
+            viewModel.maxBet()
         }
     }
 
-    private fun nextBet(): Int {
-        val currentBetIndex = listOfBets.indexOf(currentBet)
-        currentBet = if (currentBetIndex == listOfBets.lastIndex)
-            listOfBets.first()
-        else
-            listOfBets[currentBetIndex + 1]
-        return currentBet
-    }
-
-    private fun maxBet(): Int {
-        currentBet = listOfBets.last()
-        return currentBet
+    private fun spin() {
+        viewModel.finishItemCoef1 =
+            binding.rvSlot1.scrollRecyclerViewSlot(adapter1, 3).coefficient
+        viewModel.finishItemCoef2 =
+            binding.rvSlot2.scrollRecyclerViewSlot(adapter2, 4).coefficient
+        viewModel.finishItemCoef3 =
+            binding.rvSlot3.scrollRecyclerViewSlot(adapter3, 5).coefficient
+        binding.isScrolling = true
+        viewModel.spin()
     }
 
     private fun RecyclerView.setupRecyclerView(
@@ -96,24 +98,14 @@ class SlotFragment : Fragment() {
         this.adapter = adapter
     }
 
-    private fun RecyclerView.scrollRecyclerViewSlot(adapter: ScrollingSlotAdapter, increment: Int) {
-        val list = setRandom(increment)
+    private fun RecyclerView.scrollRecyclerViewSlot(
+        adapter: ScrollingSlotAdapter,
+        increment: Int
+    ): ITEMS {
+        val list = viewModel.setRandom(increment)
         adapter.submitList(null)
         adapter.submitList(list)
         smoothScrollToPosition(list.lastIndex)
-    }
-
-    private fun setRandom(increment: Int): MutableList<ITEMS> =
-        ITEMS.values().toMutableList().apply {
-            times(increment)
-            shuffle()
-        }
-
-
-    operator fun <T> MutableList<T>.times(increment: Int) {
-        val len = this.size
-        repeat(increment - 1) {
-            this += this.subList(0, len)
-        }
+        return list.last()
     }
 }
